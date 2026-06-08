@@ -1,0 +1,19 @@
+# Environment variables - never commit this
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Node / React (for later)
+node_modules/
+dist/
+
+# Docker
+postgres_data/
+
+# IDE
+.vscode/
+.idea/
