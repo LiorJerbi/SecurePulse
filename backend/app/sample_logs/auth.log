@@ -1,0 +1,10 @@
+Jun  8 08:10:01 server sshd[1234]: Failed password for root from 10.0.0.23 port 54321 ssh2
+Jun  8 08:10:02 server sshd[1234]: Failed password for root from 10.0.0.23 port 54321 ssh2
+Jun  8 08:10:03 server sshd[1234]: Failed password for root from 10.0.0.23 port 54321 ssh2
+Jun  8 08:10:04 server sshd[1234]: Failed password for root from 10.0.0.23 port 54321 ssh2
+Jun  8 08:10:05 server sshd[1234]: Failed password for root from 10.0.0.23 port 54321 ssh2
+Jun  8 08:10:06 server sshd[1235]: Accepted password for deploy from 192.168.1.105 port 60001 ssh2
+Jun  8 08:15:00 server sudo[5678]: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/bash
+Jun  8 02:30:01 server sshd[1236]: Accepted password for admin from 172.16.0.55 port 49812 ssh2
+Jun  8 08:20:01 server sshd[1237]: Failed password for nobody from 185.220.101.5 port 12345 ssh2
+Jun  8 08:20:02 server sshd[1237]: Failed password for nobody from 185.220.101.5 port 12345 ssh2
