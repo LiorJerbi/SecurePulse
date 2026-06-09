@@ -12,6 +12,7 @@ from app.models import LogEntry, Alert
 from sqlalchemy import select
 from datetime import datetime
 from app.gemini_service import explain_alert
+from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
@@ -21,6 +22,12 @@ app = FastAPI(
     version="0.2.0"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/health")
 def health_check():
