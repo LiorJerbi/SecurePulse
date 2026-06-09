@@ -30,3 +30,21 @@ class PaginatedLogs(BaseModel):
     page: int
     page_size: int
     results: list[LogEntryResponse]
+    
+
+class AlertResponse(BaseModel):
+    id: int
+    created_at: datetime
+    alert_type: str
+    severity: str
+    source_ip: str
+    description: str
+    ai_explanation: Optional[str]
+
+    model_config = {"from_attributes": True}
+
+
+class AnalysisResult(BaseModel):
+    total_alerts: int
+    by_severity: dict
+    by_type: dict

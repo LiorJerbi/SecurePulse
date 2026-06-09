@@ -6,7 +6,11 @@ from app.database import engine, Base, get_db
 from app import models
 from app.parser import parse_log_file
 from app import crud
-from app.schemas import IngestResponse, PaginatedLogs
+from app.detector import run_all_detectors
+from app.schemas import IngestResponse, PaginatedLogs, AlertResponse, AnalysisResult
+from app.models import LogEntry, Alert
+from sqlalchemy import select
+from datetime import datetime
 
 Base.metadata.create_all(bind=engine)
 
@@ -75,3 +79,31 @@ def get_logs(
         page_size=page_size,
         results=results
     )
+
+@app.post("/analyze", response_model=AnalysisResult)
+def analyze_logs(db: Session = Depends(get_db)):
+    results = run_all_detectors(db)
+    return results
+
+
+@app.get("/alerts", response_model=list[AlertResponse])
+def get_alerts(
+    severity: str = Query(None, enum=["LOW", "MEDIUM", "HIGH", "CRITICAL"]),
+    alert_type: str = Query(None),
+    from_date: datetime = Query(None),
+    to_date: datetime = Query(None),
+    db: Session = Depends(get_db)
+):
+    query = select(Alert).order_by(Alert.created_at.desc())
+
+    if severity:
+        query = query.where(Alert.severity == severity)
+    if alert_type:
+        query = query.where(Alert.alert_type == alert_type)
+    if from_date:
+        query = query.where(Alert.created_at >= from_date)
+    if to_date:
+        query = query.where(Alert.created_at <= to_date)
+
+    results = db.execute(query).scalars().all()
+    return results
