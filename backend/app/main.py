@@ -11,6 +11,7 @@ from app.schemas import IngestResponse, PaginatedLogs, AlertResponse, AnalysisRe
 from app.models import LogEntry, Alert
 from sqlalchemy import select
 from datetime import datetime
+from app.gemini_service import explain_alert
 
 Base.metadata.create_all(bind=engine)
 
@@ -107,3 +108,24 @@ def get_alerts(
 
     results = db.execute(query).scalars().all()
     return results
+
+
+@app.post("/alerts/{alert_id}/explain", response_model=AlertResponse)
+def explain_alert_endpoint(
+    alert_id: int,
+    db: Session = Depends(get_db)
+):
+    alert = db.execute(
+        select(Alert).where(Alert.id == alert_id)
+    ).scalar_one_or_none()
+
+    if not alert:
+        raise HTTPException(status_code=404, detail=f"Alert {alert_id} not found")
+
+    if alert.ai_explanation:
+        return alert
+
+    alert.ai_explanation = explain_alert(alert)
+    db.commit()
+    db.refresh(alert)
+    return alert
