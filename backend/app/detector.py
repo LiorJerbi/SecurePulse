@@ -139,6 +139,16 @@ def detect_off_hours_access(db: Session) -> list[Alert]:
 
 
 def run_all_detectors(db: Session) -> dict:
+    """
+    Run all detection rules against stored log entries.
+    Clears existing alerts before each run to ensure fresh results.
+
+    Args:
+        db: SQLAlchemy database session
+
+    Returns:
+        Summary dictionary with total_alerts and breakdowns by severity and type
+    """
     existing = db.execute(select(func.count()).select_from(Alert)).scalar()
     if existing > 0:
         db.execute(Alert.__table__.delete())

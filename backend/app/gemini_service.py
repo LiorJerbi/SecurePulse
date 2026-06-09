@@ -72,6 +72,17 @@ def call_gemini_with_backoff(prompt: str) -> str:
 
 
 def explain_alert(alert: Alert) -> str:
+    """
+    Generate an AI explanation for a security alert using Gemini.
+    Falls back to a static explanation if the API is unavailable.
+
+    Args:
+        alert: Alert model instance to explain
+
+    Returns:
+        Plain-English explanation string with WHAT HAPPENED,
+        WHY IT MATTERS, and RECOMMENDED ACTION sections
+    """
     try:
         prompt = build_prompt(alert)
         explanation = call_gemini_with_backoff(prompt)

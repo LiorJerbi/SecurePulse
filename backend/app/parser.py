@@ -20,6 +20,15 @@ AUTH_USER_PATTERN = re.compile(r'for (\S+) from|: (\S+) :')
 
 
 def parse_apache_line(line: str) -> Optional[dict]:
+    """
+    Parse a single Apache Combined Log Format line.
+
+    Args:
+        line: Raw log line string
+
+    Returns:
+        Dictionary of parsed fields or None if line doesn't match format
+    """
     match = APACHE_PATTERN.match(line.strip())
     if not match:
         return None
@@ -76,6 +85,16 @@ def parse_auth_line(line: str, year: int = 2026) -> Optional[dict]:
 
 
 def parse_log_file(filepath: str, log_type: str) -> list[dict]:
+    """
+    Parse an entire log file and return all valid entries.
+
+    Args:
+        filepath: Absolute path to the log file
+        log_type: Either 'apache' or 'auth'
+
+    Returns:
+        List of parsed log entry dictionaries, skipping invalid lines
+    """
     results = []
     with open(filepath, "r") as f:
         for line in f:

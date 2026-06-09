@@ -136,3 +136,31 @@ def explain_alert_endpoint(
     db.commit()
     db.refresh(alert)
     return alert
+
+
+@app.get("/metrics")
+def get_metrics(db: Session = Depends(get_db)):
+    from sqlalchemy import func
+
+    total_logs = db.execute(select(func.count()).select_from(LogEntry)).scalar()
+    total_alerts = db.execute(select(func.count()).select_from(Alert)).scalar()
+
+    alerts_by_type = db.execute(
+        select(Alert.alert_type, func.count(Alert.id))
+        .group_by(Alert.alert_type)
+    ).all()
+
+    alerts_by_severity = db.execute(
+        select(Alert.severity, func.count(Alert.id))
+        .group_by(Alert.severity)
+    ).all()
+
+    detection_rate = round(total_alerts / total_logs * 100, 2) if total_logs > 0 else 0
+
+    return {
+        "total_logs": total_logs,
+        "total_alerts": total_alerts,
+        "detection_rate_percent": detection_rate,
+        "alerts_by_type": {row[0]: row[1] for row in alerts_by_type},
+        "alerts_by_severity": {row[0]: row[1] for row in alerts_by_severity},
+    }
