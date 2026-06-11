@@ -43,35 +43,62 @@ export default function App() {
             {/* Header */}
             <div style={{
                 borderBottom: '1px solid #1e293b',
-                padding: '16px 32px',
+                padding: '0 32px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                height: 60,
+                background: 'linear-gradient(180deg, #0d1829 0%, #0f172a 100%)',
+                position: 'sticky',
+                top: 0,
+                zIndex: 100,
             }}>
-                <div>
-                    <span style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9' }}>
-                        SecurePulse
-                    </span>
-                    <span style={{ color: '#2563eb', marginLeft: 2 }}>.</span>
-                    <span style={{ fontSize: 12, color: '#64748b', marginLeft: 12 }}>
-                        AI-Powered Threat Detection
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{
+                        width: 32, height: 32,
+                        background: 'linear-gradient(135deg, #2563eb, #0ea5e9)',
+                        borderRadius: 8,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 16,
+                    }}>🛡️</div>
+                    <div>
+                        <span style={{ fontSize: 18, fontWeight: 700, color: '#f1f5f9', letterSpacing: -0.5 }}>
+                            SecurePulse
+                        </span>
+                        <span style={{ color: '#2563eb' }}>.</span>
+                    </div>
+                    <span style={{
+                        fontSize: 11,
+                        color: '#1e40af',
+                        background: '#1e3a5f',
+                        padding: '2px 8px',
+                        borderRadius: 4,
+                        letterSpacing: 1,
+                        fontWeight: 500,
+                    }}>
+                        AI THREAT DETECTION
                     </span>
                 </div>
                 <button
                     onClick={handleAnalyze}
                     disabled={analyzing}
                     style={{
-                        background: analyzing ? '#334155' : '#2563eb',
-                        color: '#fff',
+                        background: analyzing
+                            ? '#1e293b'
+                            : 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                        color: analyzing ? '#64748b' : '#fff',
                         border: 'none',
                         borderRadius: 8,
                         padding: '8px 20px',
                         cursor: analyzing ? 'not-allowed' : 'pointer',
                         fontWeight: 600,
-                        fontSize: 14,
+                        fontSize: 13,
+                        letterSpacing: 0.3,
+                        boxShadow: analyzing ? 'none' : '0 0 20px #2563eb40',
+                        transition: 'all 0.2s',
                     }}
                 >
-                    {analyzing ? 'Analyzing...' : '⚡ Run Analysis'}
+                    {analyzing ? '⏳ Analyzing...' : '⚡ Run Analysis'}
                 </button>
             </div>
 

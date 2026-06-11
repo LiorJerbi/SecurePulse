@@ -164,3 +164,45 @@ class TestPrivilegeEscalationDetector:
             alerts = detect_privilege_escalation(db)
 
         assert len(alerts) == 0
+
+
+class TestHttpScannerDetector:
+    def test_fires_on_ten_404s_within_window(self):
+        base_time = datetime(2026, 6, 8, 9, 0, 0)
+        entries = [
+            make_log_entry(
+                id=i,
+                source_ip="185.220.101.5",
+                log_type="apache",
+                status_code=404,
+                timestamp=base_time + timedelta(seconds=i)
+            )
+            for i in range(10)
+        ]
+
+        db = MagicMock()
+        db.execute.return_value.scalars.return_value.all.return_value = entries
+
+        alerts = detect_http_scanner(db)
+        assert len(alerts) == 1
+        assert alerts[0].alert_type == "HTTP_SCANNER"
+        assert alerts[0].severity == "MEDIUM"
+
+    def test_does_not_fire_on_nine_404s(self):
+        base_time = datetime(2026, 6, 8, 9, 0, 0)
+        entries = [
+            make_log_entry(
+                id=i,
+                source_ip="185.220.101.5",
+                log_type="apache",
+                status_code=404,
+                timestamp=base_time + timedelta(seconds=i)
+            )
+            for i in range(9)
+        ]
+
+        db = MagicMock()
+        db.execute.return_value.scalars.return_value.all.return_value = entries
+
+        alerts = detect_http_scanner(db)
+        assert len(alerts) == 0
