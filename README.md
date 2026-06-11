@@ -1,6 +1,14 @@
 # SecurePulse
+![CI](https://github.com/LiorJerbi/SecurePulse/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/coverage-86%25-brightgreen)
+![Python](https://img.shields.io/badge/python-3.12-blue)
 
-AI-powered log analysis and threat detection dashboard. Ingests Apache and Linux auth logs, runs automated detection rules, and uses Gemini AI to explain security alerts in plain English.
+AI-powered log analysis and threat detection dashboard — a lightweight SIEM built with 
+FastAPI, PostgreSQL, and React. Ingests Apache and Linux auth logs, runs 4 automated 
+detection rules, and uses Gemini AI to explain each security alert in plain English. 
+Includes a full pytest suite at 86% coverage with GitHub Actions CI.
+
+![SecurePulse Dashboard](docs/dashboard.png)
 
 ## Features
 
@@ -46,9 +54,10 @@ Gemini AI API
 git clone https://github.com/LiorJerbi/SecurePulse.git
 cd SecurePulse
 
-# Add your Gemini API key
-cp .env.example .env
-# Edit .env and add your GEMINI_API_KEY
+# Copy the example env file
+On Mac/Linux: cp .env.example .env
+On Windows:   copy .env.example .env
+# Then edit .env and add your GEMINI_API_KEY
 
 # Start the backend
 docker-compose up --build
@@ -93,3 +102,11 @@ docker exec -it securepulse-backend-1 pytest tests/ -v --cov=app --cov-report=te
 | HTTP Scanner | 10+ 404 responses to same IP in 30s | MEDIUM |
 | Privilege Escalation | sudo by non-whitelisted user | CRITICAL |
 | Off-Hours Access | Successful login between 00:00–05:00 | MEDIUM |
+
+## Future Work
+
+- **Real-time log watching** — `watchdog`-based folder monitor for automatic ingestion
+- **More detection rules** — port scanning, SQL injection patterns, geographic anomalies  
+- **Alert deduplication** — group repeated alerts from same IP into one incident
+- **Authentication** — JWT-based API auth for multi-user deployments
+- **Cloud deployment** — containerized deployment on AWS ECS or Railway
