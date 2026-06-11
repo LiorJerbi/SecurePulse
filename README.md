@@ -8,7 +8,7 @@ FastAPI, PostgreSQL, and React. Ingests Apache and Linux auth logs, runs 4 autom
 detection rules, and uses Gemini AI to explain each security alert in plain English. 
 Includes a full pytest suite at 86% coverage with GitHub Actions CI.
 
-![SecurePulse Dashboard](docs/dashboard.png)
+![SecurePulse Dashboard](docs/Dashboard.jpg)
 
 ## Features
 
